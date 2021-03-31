@@ -24,6 +24,11 @@ public class SensorDataService {
     }
 
     public SensorData createSensorData(SensorData sensorData) {
+        for (SensorData savedSensorData : sensorDataRepository.findAll()) {
+            if (savedSensorData.getTimestamp().equals(sensorData.getTimestamp())) {
+                throw new IllegalStateException("There already is Data for this time!");
+            }
+        }
         sensorDataRepository.save(sensorData);
         return sensorData;
     }
