@@ -9,7 +9,7 @@ public class SensorData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Transient
+    // 102 - temperature; 103 - humidity; 104 - luminosity
     private int sensorId;
     private Timestamp timestamp;
     private double data;
