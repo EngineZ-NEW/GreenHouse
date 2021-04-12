@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.lviv.iot.GreenHouse.dao.SensorDataRepository;
 import ua.lviv.iot.GreenHouse.models.SensorData;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -76,6 +77,7 @@ public class SensorDataService {
         return responseSensorData;
     }
 
+    @Transactional
     public void deleteSensorData(int sensorId) {
         sensorDataRepository.deleteSensorDataBySensorId(sensorId);
     }
@@ -84,6 +86,16 @@ public class SensorDataService {
         for (SensorData sensorData : getSensorDataForDate(date, sensorId)) {
             sensorDataRepository.delete(sensorData);
         }
+    }
+
+    public SensorData updateDataById(int id, double data) {
+        boolean exists = sensorDataRepository.existsById(id);
+        if (!exists)
+            throw new IllegalStateException("There is no data with id " + id);
+        SensorData sensorData = sensorDataRepository.findSensorDataById(id);
+        sensorData.setData(data);
+        sensorDataRepository.save(sensorData);
+        return sensorData;
     }
 }
 

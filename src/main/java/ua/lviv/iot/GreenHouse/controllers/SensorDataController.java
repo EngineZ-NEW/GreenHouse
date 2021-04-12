@@ -119,4 +119,10 @@ public class SensorDataController {
     public void deleteLuminosityForDay(final @PathVariable("date") String date) {
         sensorDataService.deleteSensorDataForDate(date, LUMINOSITY_SENSOR_ID);
     }
+
+    @PutMapping("{id}")
+    public SensorData updateDataById(final @RequestBody SensorData sensorData,
+                                       final @PathVariable("id") int id) {
+        return sensorDataService.updateDataById(id, sensorData.getData());
+    }
 }
