@@ -1,4 +1,4 @@
-package ua.lviv.iot.GreenHouse.models;
+package ua.lviv.iot.greenhouse.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

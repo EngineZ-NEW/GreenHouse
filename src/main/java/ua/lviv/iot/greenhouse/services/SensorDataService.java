@@ -1,9 +1,9 @@
-package ua.lviv.iot.GreenHouse.services;
+package ua.lviv.iot.greenhouse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.lviv.iot.GreenHouse.dao.SensorDataRepository;
-import ua.lviv.iot.GreenHouse.models.SensorData;
+import ua.lviv.iot.greenhouse.dao.SensorDataRepository;
+import ua.lviv.iot.greenhouse.models.SensorData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -43,14 +43,18 @@ public class SensorDataService {
         List<SensorData> responseSensorData = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         for (SensorData sensorData : sensorDataRepository.findAll()) {
-            long timestamp = sensorData.getTimestamp().getTime();
-            calendar.setTimeInMillis(timestamp);
-            String receivedDate = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
-            if (receivedDate.equals(date))
-                responseSensorData.add(sensorData);
+            findDataForDate(date, responseSensorData, calendar, sensorData);
         }
         return responseSensorData;
+    }
+
+    private void findDataForDate(String date, List<SensorData> responseSensorData, Calendar calendar, SensorData sensorData) {
+        long timestamp = sensorData.getTimestamp().getTime();
+        calendar.setTimeInMillis(timestamp);
+        String receivedDate = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+        if (receivedDate.equals(date))
+            responseSensorData.add(sensorData);
     }
 
     public void deleteAllSensorDataForDate(String date) {
@@ -67,12 +71,7 @@ public class SensorDataService {
         List<SensorData> responseSensorData = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         for (SensorData sensorData : sensorDataRepository.findSensorDataBySensorId(sensorId)) {
-            long timestamp = sensorData.getTimestamp().getTime();
-            calendar.setTimeInMillis(timestamp);
-            String receivedDate = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
-            if (receivedDate.equals(date))
-                responseSensorData.add(sensorData);
+            findDataForDate(date, responseSensorData, calendar, sensorData);
         }
         return responseSensorData;
     }

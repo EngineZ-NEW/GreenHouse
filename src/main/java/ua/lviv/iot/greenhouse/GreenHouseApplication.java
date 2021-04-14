@@ -1,4 +1,4 @@
-package ua.lviv.iot.GreenHouse;
+package ua.lviv.iot.greenhouse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

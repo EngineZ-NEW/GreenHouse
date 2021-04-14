@@ -1,8 +1,8 @@
-package ua.lviv.iot.GreenHouse.dao;
+package ua.lviv.iot.greenhouse.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ua.lviv.iot.GreenHouse.models.SensorData;
+import ua.lviv.iot.greenhouse.models.SensorData;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
-package ua.lviv.iot.GreenHouse.controllers;
+package ua.lviv.iot.greenhouse.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ua.lviv.iot.GreenHouse.models.SensorData;
-import ua.lviv.iot.GreenHouse.services.SensorDataService;
+import ua.lviv.iot.greenhouse.models.SensorData;
+import ua.lviv.iot.greenhouse.services.SensorDataService;
 
 import java.util.List;
 
