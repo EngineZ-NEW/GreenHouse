@@ -6,8 +6,8 @@ import ua.lviv.iot.greenhouse.dao.SensorDataDAO;
 import ua.lviv.iot.greenhouse.models.SensorData;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -41,57 +41,67 @@ public class SensorDataService {
     }
 
     public List<SensorData> getAllSensorDataForDate(String date) {
-        List<SensorData> responseSensorData = new ArrayList<>();
-        for (SensorData sensorData : sensorDataDAO.findAll()) {
-            findDataForDate(date, responseSensorData, sensorData);
-        }
-        return responseSensorData;
-    }
 
-    private void findDataForDate(String date, List<SensorData> responseSensorData, SensorData sensorData) {
-        LocalDateTime localDateTime = sensorData.getLocalDateTime();
-        String receivedDate = String.format("%04d-%02d-%02d", localDateTime.getYear(),
-                localDateTime.getMonth().getValue(), localDateTime.getDayOfMonth());
-        if (receivedDate.equals(date))
-            responseSensorData.add(sensorData);
+        LocalDate localDate = LocalDate.parse(date);
+
+        return sensorDataDAO.findSensorDataByLocalDateTimeBetween(
+                localDate.atTime(LocalTime.MIN),
+                localDate.atTime(LocalTime.MAX)
+        );
     }
 
     public void deleteAllSensorDataForDate(String date) {
-        for (SensorData sensorData : getAllSensorDataForDate(date)) {
-            sensorDataDAO.delete(sensorData);
-        }
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        sensorDataDAO.deleteSensorDataByLocalDateTimeBetween(
+                localDate.atTime(LocalTime.MIN),
+                localDate.atTime(LocalTime.MAX)
+        );
     }
 
     public List<SensorData> getSensorData(int sensorId) {
+
         return sensorDataDAO.findSensorDataBySensorId(sensorId);
     }
 
     public List<SensorData> getSensorDataForDate(String date, int sensorId) {
-        List<SensorData> responseSensorData = new ArrayList<>();
-        for (SensorData sensorData : sensorDataDAO.findSensorDataBySensorId(sensorId)) {
-            findDataForDate(date, responseSensorData, sensorData);
-        }
-        return responseSensorData;
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        return sensorDataDAO.findSensorDataBySensorIdAndLocalDateTimeBetween(
+                sensorId,
+                localDate.atTime(LocalTime.MIN),
+                localDate.atTime(LocalTime.MAX)
+        );
     }
 
     public void deleteSensorData(int sensorId) {
+
         sensorDataDAO.deleteSensorDataBySensorId(sensorId);
     }
 
     public void deleteSensorDataForDate(String date, int sensorId) {
-        for (SensorData sensorData : getSensorDataForDate(date, sensorId)) {
-            sensorDataDAO.delete(sensorData);
-        }
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        sensorDataDAO.deleteSensorDataBySensorIdAndLocalDateTimeBetween(
+                sensorId,
+                localDate.atTime(LocalTime.MIN),
+                localDate.atTime(LocalTime.MAX)
+        );
     }
 
     public SensorData updateDataById(Long id, double data) {
-        boolean exists = sensorDataDAO.existsById(id);
-        if (!exists)
+
+        if (!sensorDataDAO.existsById(id)) {
             throw new IllegalStateException("There is no data with id " + id);
+        }
+
         SensorData sensorData = sensorDataDAO.findSensorDataById(id);
         sensorData.setData(data);
+
         sensorDataDAO.save(sensorData);
         return sensorData;
     }
 }
-
