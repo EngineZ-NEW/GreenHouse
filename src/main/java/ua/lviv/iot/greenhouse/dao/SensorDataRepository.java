@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface SensorDataRepository extends JpaRepository<SensorData, Integer> {
+
     List<SensorData> findSensorDataBySensorId(int sensorId);
 
     void deleteSensorDataBySensorId(int sensorId);

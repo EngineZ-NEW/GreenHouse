@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
+@Transactional // At class level is applied to all methods of the class
 public class SensorDataService {
 
     private final SensorDataRepository sensorDataRepository;
@@ -76,7 +77,6 @@ public class SensorDataService {
         return responseSensorData;
     }
 
-    @Transactional
     public void deleteSensorData(int sensorId) {
         sensorDataRepository.deleteSensorDataBySensorId(sensorId);
     }

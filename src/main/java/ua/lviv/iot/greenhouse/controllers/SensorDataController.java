@@ -121,8 +121,7 @@ public class SensorDataController {
     }
 
     @PutMapping("{id}")
-    public SensorData updateDataById(final @RequestBody SensorData sensorData,
-                                       final @PathVariable("id") int id) {
+    public SensorData updateDataById(final @RequestBody SensorData sensorData, final @PathVariable("id") int id) {
         return sensorDataService.updateDataById(id, sensorData.getData());
     }
 }
