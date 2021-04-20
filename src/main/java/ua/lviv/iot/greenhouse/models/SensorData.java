@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -20,12 +20,12 @@ public class SensorData {
     private Long id;
     // 102 - temperature; 103 - humidity; 104 - luminosity
     private int sensorId;
-    private Timestamp timestamp;
+    private LocalDateTime localDateTime;
     private double data;
 
-    public SensorData(int sensorId, Timestamp timestamp, double data) {
+    public SensorData(int sensorId, LocalDateTime localDateTime, double data) {
         this.sensorId = sensorId;
-        this.timestamp = timestamp;
+        this.localDateTime = localDateTime;
         this.data = data;
     }
 }

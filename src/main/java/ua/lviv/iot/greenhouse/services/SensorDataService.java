@@ -2,98 +2,95 @@ package ua.lviv.iot.greenhouse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.lviv.iot.greenhouse.dao.SensorDataRepository;
+import ua.lviv.iot.greenhouse.dao.SensorDataDAO;
 import ua.lviv.iot.greenhouse.models.SensorData;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
 @Transactional // At class level is applied to all methods of the class
 public class SensorDataService {
 
-    private final SensorDataRepository sensorDataRepository;
+    private final SensorDataDAO sensorDataDAO;
 
     @Autowired
-    public SensorDataService(SensorDataRepository sensorDataRepository) {
-        this.sensorDataRepository = sensorDataRepository;
+    public SensorDataService(SensorDataDAO sensorDataDAO) {
+        this.sensorDataDAO = sensorDataDAO;
     }
 
     public List<SensorData> getAllSensorData() {
-        return sensorDataRepository.findAll();
+        return sensorDataDAO.findAll();
     }
 
     public SensorData createSensorData(SensorData sensorData, int sensorId) {
         sensorData.setSensorId(sensorId);
-        for (SensorData savedSensorData : sensorDataRepository.findSensorDataBySensorId(sensorId)) {
-            if (savedSensorData.getTimestamp().equals(sensorData.getTimestamp())) {
+        for (SensorData savedSensorData : sensorDataDAO.findSensorDataBySensorId(sensorId)) {
+            if (savedSensorData.getLocalDateTime().equals(sensorData.getLocalDateTime())) {
                 throw new IllegalStateException("There already is Data for this time!");
             }
         }
-        sensorDataRepository.save(sensorData);
+        sensorDataDAO.save(sensorData);
         return sensorData;
     }
 
     public void deleteAllSensorData() {
-        sensorDataRepository.deleteAll();
+        sensorDataDAO.deleteAll();
     }
 
     public List<SensorData> getAllSensorDataForDate(String date) {
         List<SensorData> responseSensorData = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        for (SensorData sensorData : sensorDataRepository.findAll()) {
-            findDataForDate(date, responseSensorData, calendar, sensorData);
+        for (SensorData sensorData : sensorDataDAO.findAll()) {
+            findDataForDate(date, responseSensorData, sensorData);
         }
         return responseSensorData;
     }
 
-    private void findDataForDate(String date, List<SensorData> responseSensorData, Calendar calendar, SensorData sensorData) {
-        long timestamp = sensorData.getTimestamp().getTime();
-        calendar.setTimeInMillis(timestamp);
-        String receivedDate = String.format("%04d-%02d-%02d", calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+    private void findDataForDate(String date, List<SensorData> responseSensorData, SensorData sensorData) {
+        LocalDateTime localDateTime = sensorData.getLocalDateTime();
+        String receivedDate = String.format("%04d-%02d-%02d", localDateTime.getYear(),
+                localDateTime.getMonth().getValue(), localDateTime.getDayOfMonth());
         if (receivedDate.equals(date))
             responseSensorData.add(sensorData);
     }
 
     public void deleteAllSensorDataForDate(String date) {
         for (SensorData sensorData : getAllSensorDataForDate(date)) {
-            sensorDataRepository.delete(sensorData);
+            sensorDataDAO.delete(sensorData);
         }
     }
 
     public List<SensorData> getSensorData(int sensorId) {
-        return sensorDataRepository.findSensorDataBySensorId(sensorId);
+        return sensorDataDAO.findSensorDataBySensorId(sensorId);
     }
 
     public List<SensorData> getSensorDataForDate(String date, int sensorId) {
         List<SensorData> responseSensorData = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        for (SensorData sensorData : sensorDataRepository.findSensorDataBySensorId(sensorId)) {
-            findDataForDate(date, responseSensorData, calendar, sensorData);
+        for (SensorData sensorData : sensorDataDAO.findSensorDataBySensorId(sensorId)) {
+            findDataForDate(date, responseSensorData, sensorData);
         }
         return responseSensorData;
     }
 
     public void deleteSensorData(int sensorId) {
-        sensorDataRepository.deleteSensorDataBySensorId(sensorId);
+        sensorDataDAO.deleteSensorDataBySensorId(sensorId);
     }
 
     public void deleteSensorDataForDate(String date, int sensorId) {
         for (SensorData sensorData : getSensorDataForDate(date, sensorId)) {
-            sensorDataRepository.delete(sensorData);
+            sensorDataDAO.delete(sensorData);
         }
     }
 
     public SensorData updateDataById(Long id, double data) {
-        boolean exists = sensorDataRepository.existsById(id);
+        boolean exists = sensorDataDAO.existsById(id);
         if (!exists)
             throw new IllegalStateException("There is no data with id " + id);
-        SensorData sensorData = sensorDataRepository.findSensorDataById(id);
+        SensorData sensorData = sensorDataDAO.findSensorDataById(id);
         sensorData.setData(data);
-        sensorDataRepository.save(sensorData);
+        sensorDataDAO.save(sensorData);
         return sensorData;
     }
 }
