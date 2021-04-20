@@ -18,13 +18,12 @@ public class SensorData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // 102 - temperature; 103 - humidity; 104 - luminosity
-    private int sensorId;
+    private SensorType sensorType;
     private LocalDateTime localDateTime;
     private double data;
 
-    public SensorData(int sensorId, LocalDateTime localDateTime, double data) {
-        this.sensorId = sensorId;
+    public SensorData(SensorType sensorType, LocalDateTime localDateTime, double data) {
+        this.sensorType = sensorType;
         this.localDateTime = localDateTime;
         this.data = data;
     }

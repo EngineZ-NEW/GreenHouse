@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.greenhouse.dao.SensorDataDAO;
 import ua.lviv.iot.greenhouse.models.SensorData;
+import ua.lviv.iot.greenhouse.models.SensorType;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -25,9 +26,9 @@ public class SensorDataService {
         return sensorDataDAO.findAll();
     }
 
-    public SensorData createSensorData(SensorData sensorData, int sensorId) {
-        sensorData.setSensorId(sensorId);
-        for (SensorData savedSensorData : sensorDataDAO.findSensorDataBySensorId(sensorId)) {
+    public SensorData createSensorData(SensorData sensorData, SensorType sensorType) {
+        sensorData.setSensorType(sensorType);
+        for (SensorData savedSensorData : sensorDataDAO.findSensorDataBySensorType(sensorType)) {
             if (savedSensorData.getLocalDateTime().equals(sensorData.getLocalDateTime())) {
                 throw new IllegalStateException("There already is Data for this time!");
             }
@@ -60,33 +61,33 @@ public class SensorDataService {
         );
     }
 
-    public List<SensorData> getSensorData(int sensorId) {
+    public List<SensorData> getSensorData(SensorType sensorType) {
 
-        return sensorDataDAO.findSensorDataBySensorId(sensorId);
+        return sensorDataDAO.findSensorDataBySensorType(sensorType);
     }
 
-    public List<SensorData> getSensorDataForDate(String date, int sensorId) {
+    public List<SensorData> getSensorDataForDate(String date, SensorType sensorType) {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        return sensorDataDAO.findSensorDataBySensorIdAndLocalDateTimeBetween(
-                sensorId,
+        return sensorDataDAO.findSensorDataBySensorTypeAndLocalDateTimeBetween(
+                sensorType,
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
         );
     }
 
-    public void deleteSensorData(int sensorId) {
+    public void deleteSensorData(SensorType sensorType) {
 
-        sensorDataDAO.deleteSensorDataBySensorId(sensorId);
+        sensorDataDAO.deleteSensorDataBySensorType(sensorType);
     }
 
-    public void deleteSensorDataForDate(String date, int sensorId) {
+    public void deleteSensorDataForDate(String date, SensorType sensorType) {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        sensorDataDAO.deleteSensorDataBySensorIdAndLocalDateTimeBetween(
-                sensorId,
+        sensorDataDAO.deleteSensorDataBySensorTypeAndLocalDateTimeBetween(
+                sensorType,
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
         );
