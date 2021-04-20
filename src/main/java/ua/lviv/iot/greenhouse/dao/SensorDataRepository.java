@@ -7,11 +7,11 @@ import ua.lviv.iot.greenhouse.models.SensorData;
 import java.util.List;
 
 @Repository
-public interface SensorDataRepository extends JpaRepository<SensorData, Integer> {
+public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
 
     List<SensorData> findSensorDataBySensorId(int sensorId);
 
     void deleteSensorDataBySensorId(int sensorId);
 
-    SensorData findSensorDataById(int id);
+    SensorData findSensorDataById(Long id);
 }

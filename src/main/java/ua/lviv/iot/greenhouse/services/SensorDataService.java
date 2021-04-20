@@ -87,7 +87,7 @@ public class SensorDataService {
         }
     }
 
-    public SensorData updateDataById(int id, double data) {
+    public SensorData updateDataById(Long id, double data) {
         boolean exists = sensorDataRepository.existsById(id);
         if (!exists)
             throw new IllegalStateException("There is no data with id " + id);
