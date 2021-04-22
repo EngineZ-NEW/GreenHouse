@@ -4,27 +4,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ua.lviv.iot.greenhouse.models.data.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class SensorData {
+public class Sensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private SensorType sensorType;
-    private LocalDateTime localDateTime;
-    private double data;
+    @Embedded
+    private Data data;
 
-    public SensorData(SensorType sensorType, LocalDateTime localDateTime, double data) {
-        this.sensorType = sensorType;
-        this.localDateTime = localDateTime;
+    public Sensor(Data data) {
         this.data = data;
     }
 }

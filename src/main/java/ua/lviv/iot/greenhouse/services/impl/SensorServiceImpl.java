@@ -2,10 +2,10 @@ package ua.lviv.iot.greenhouse.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ua.lviv.iot.greenhouse.dao.SensorDataDAO;
-import ua.lviv.iot.greenhouse.models.SensorData;
+import ua.lviv.iot.greenhouse.dao.SensorDAO;
+import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.SensorType;
-import ua.lviv.iot.greenhouse.services.SensorDataService;
+import ua.lviv.iot.greenhouse.services.SensorService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -15,50 +15,50 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional // At class level is applied to all methods of the class
-public class SensorDataServiceImpl implements SensorDataService {
+public class SensorServiceImpl implements SensorService {
 
-    private final SensorDataDAO sensorDataDAO;
+    private final SensorDAO sensorDAO;
 
     @Override
-    public SensorData createSensorData(SensorData sensorData, SensorType sensorType) {
-        sensorData.setSensorType(sensorType);
-        for (SensorData savedSensorData : sensorDataDAO.findSensorDataBySensorType(sensorType)) {
-            if (savedSensorData.getLocalDateTime().equals(sensorData.getLocalDateTime())) {
+    public Sensor createSensorData(Sensor sensor, SensorType sensorType) {
+        sensor.getData().setSensorType(sensorType);
+        for (Sensor savedSensor : sensorDAO.findSensorByData_SensorType(sensorType)) {
+            if (savedSensor.getData().getLocalDateTime().equals(sensor.getData().getLocalDateTime())) {
                 throw new IllegalStateException("There already is Data for this time!");
             }
         }
-        sensorDataDAO.save(sensorData);
-        return sensorData;
+        sensorDAO.save(sensor);
+        return sensor;
     }
 
     @Override
-    public List<SensorData> getAllSensorData() {
-        return sensorDataDAO.findAll();
+    public List<Sensor> getAllSensorData() {
+        return sensorDAO.findAll();
     }
 
     @Override
-    public List<SensorData> getAllSensorDataForDate(String date) {
+    public List<Sensor> getAllSensorDataForDate(String date) {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        return sensorDataDAO.findSensorDataByLocalDateTimeBetween(
+        return sensorDAO.findSensorByData_LocalDateTimeBetween(
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
         );
     }
 
     @Override
-    public List<SensorData> getSensorDataBySensorType(SensorType sensorType) {
+    public List<Sensor> getSensorDataBySensorType(SensorType sensorType) {
 
-        return sensorDataDAO.findSensorDataBySensorType(sensorType);
+        return sensorDAO.findSensorByData_SensorType(sensorType);
     }
 
     @Override
-    public List<SensorData> getSensorDataForDate(String date, SensorType sensorType) {
+    public List<Sensor> getSensorDataForDate(String date, SensorType sensorType) {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        return sensorDataDAO.findSensorDataBySensorTypeAndLocalDateTimeBetween(
+        return sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTimeBetween(
                 sensorType,
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
@@ -66,22 +66,22 @@ public class SensorDataServiceImpl implements SensorDataService {
     }
 
     @Override
-    public SensorData updateDataById(Long id, double data) {
+    public Sensor updateDataById(Long id, double data) {
 
-        if (!sensorDataDAO.existsById(id)) {
+        if (!sensorDAO.existsById(id)) {
             throw new IllegalStateException("There is no data with id " + id);
         }
 
-        SensorData sensorData = sensorDataDAO.findSensorDataById(id);
-        sensorData.setData(data);
+        Sensor sensor = sensorDAO.findSensorById(id);
+        sensor.getData().setCurrentData(data);
 
-        sensorDataDAO.save(sensorData);
-        return sensorData;
+        sensorDAO.save(sensor);
+        return sensor;
     }
 
     @Override
     public void deleteAllSensorData() {
-        sensorDataDAO.deleteAll();
+        sensorDAO.deleteAll();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class SensorDataServiceImpl implements SensorDataService {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        sensorDataDAO.deleteSensorDataByLocalDateTimeBetween(
+        sensorDAO.deleteSensorByData_LocalDateTimeBetween(
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
         );
@@ -98,7 +98,7 @@ public class SensorDataServiceImpl implements SensorDataService {
     @Override
     public void deleteSensorDataBySensorType(SensorType sensorType) {
 
-        sensorDataDAO.deleteSensorDataBySensorType(sensorType);
+        sensorDAO.deleteSensorByData_SensorType(sensorType);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class SensorDataServiceImpl implements SensorDataService {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        sensorDataDAO.deleteSensorDataBySensorTypeAndLocalDateTimeBetween(
+        sensorDAO.deleteSensorByData_SensorTypeAndData_LocalDateTimeBetween(
                 sensorType,
                 localDate.atTime(LocalTime.MIN),
                 localDate.atTime(LocalTime.MAX)
