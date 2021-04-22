@@ -26,17 +26,17 @@ public class SensorDataController {
 
     @GetMapping("/temperature-data")
     public List<SensorData> getTemperature() {
-        return sensorDataService.getSensorData(SensorType.TEMPERATURE);
+        return sensorDataService.getSensorDataBySensorType(SensorType.TEMPERATURE);
     }
 
     @GetMapping("/humidity-data")
     public List<SensorData> getHumidity() {
-        return sensorDataService.getSensorData(SensorType.HUMIDITY);
+        return sensorDataService.getSensorDataBySensorType(SensorType.HUMIDITY);
     }
 
     @GetMapping("/luminosity-data")
     public List<SensorData> getLuminosity() {
-        return sensorDataService.getSensorData(SensorType.LUMINOSITY);
+        return sensorDataService.getSensorDataBySensorType(SensorType.LUMINOSITY);
     }
 
     // date should be in format yyyy-mm-dd
@@ -82,17 +82,17 @@ public class SensorDataController {
 
     @DeleteMapping("/temperature-data")
     public void deleteTemperature() {
-        sensorDataService.deleteSensorData(SensorType.TEMPERATURE);
+        sensorDataService.deleteSensorDataBySensorType(SensorType.TEMPERATURE);
     }
 
     @DeleteMapping("/humidity-data")
     public void deleteHumidity() {
-        sensorDataService.deleteSensorData(SensorType.HUMIDITY);
+        sensorDataService.deleteSensorDataBySensorType(SensorType.HUMIDITY);
     }
 
     @DeleteMapping("/luminosity-data")
     public void deleteLuminosity() {
-        sensorDataService.deleteSensorData(SensorType.LUMINOSITY);
+        sensorDataService.deleteSensorDataBySensorType(SensorType.LUMINOSITY);
     }
 
     @DeleteMapping("/{date}")
