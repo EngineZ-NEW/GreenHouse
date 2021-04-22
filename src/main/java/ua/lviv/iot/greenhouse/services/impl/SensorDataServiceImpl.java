@@ -1,6 +1,6 @@
 package ua.lviv.iot.greenhouse.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.greenhouse.dao.SensorDataDAO;
 import ua.lviv.iot.greenhouse.models.SensorData;
@@ -13,15 +13,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Transactional // At class level is applied to all methods of the class
 public class SensorDataServiceImpl implements SensorDataService {
 
     private final SensorDataDAO sensorDataDAO;
-
-    @Autowired
-    public SensorDataServiceImpl(SensorDataDAO sensorDataDAO) {
-        this.sensorDataDAO = sensorDataDAO;
-    }
 
     @Override
     public SensorData createSensorData(SensorData sensorData, SensorType sensorType) {

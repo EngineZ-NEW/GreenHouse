@@ -1,6 +1,6 @@
 package ua.lviv.iot.greenhouse.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.greenhouse.models.SensorData;
 import ua.lviv.iot.greenhouse.models.SensorType;
@@ -10,14 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sensors")
+@RequiredArgsConstructor
 public class SensorDataController {
 
     private final SensorDataService sensorDataService;
-
-    @Autowired
-    public SensorDataController(SensorDataService sensorDataService) {
-        this.sensorDataService = sensorDataService;
-    }
 
     @GetMapping
     public List<SensorData> getAllSensorData() {
