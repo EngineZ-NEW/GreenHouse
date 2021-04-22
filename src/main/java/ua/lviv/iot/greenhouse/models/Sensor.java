@@ -9,6 +9,7 @@ import ua.lviv.iot.greenhouse.models.data.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "sensor_data")
 @NoArgsConstructor
 @Getter
 @Setter

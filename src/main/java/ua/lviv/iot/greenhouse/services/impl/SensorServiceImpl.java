@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +22,15 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public Sensor createSensorData(Sensor sensor, SensorType sensorType) {
-        sensor.getData().setSensorType(sensorType);
-        for (Sensor savedSensor : sensorDAO.findSensorByData_SensorType(sensorType)) {
-            if (savedSensor.getData().getLocalDateTime().equals(sensor.getData().getLocalDateTime())) {
-                throw new IllegalStateException("There already is Data for this time!");
-            }
+
+        Optional<Sensor> sensorOptional = sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTime(sensorType,
+                sensor.getData().getLocalDateTime());
+
+        if (sensorOptional.isPresent()) {
+            throw new IllegalStateException("There already is Data for this time!");
         }
+
+        sensor.getData().setSensorType(sensorType);
         sensorDAO.save(sensor);
         return sensor;
     }
