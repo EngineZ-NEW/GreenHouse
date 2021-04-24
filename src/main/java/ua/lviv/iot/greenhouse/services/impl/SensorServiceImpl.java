@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.greenhouse.dao.SensorDAO;
 import ua.lviv.iot.greenhouse.models.Sensor;
-import ua.lviv.iot.greenhouse.models.SensorType;
+import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
 
 import javax.transaction.Transactional;
@@ -70,14 +70,14 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public Sensor updateDataById(Long id, double data) {
+    public Sensor updateDataById(Long id, double currentData) {
 
         if (!sensorDAO.existsById(id)) {
             throw new IllegalStateException("There is no data with id " + id);
         }
 
         Sensor sensor = sensorDAO.findSensorById(id);
-        sensor.getData().setCurrentData(data);
+        sensor.getData().setCurrentData(currentData);
 
         sensorDAO.save(sensor);
         return sensor;

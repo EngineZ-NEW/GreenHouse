@@ -1,4 +1,4 @@
-package ua.lviv.iot.greenhouse.models;
+package ua.lviv.iot.greenhouse.models.type;
 
 public enum SensorType {
     TEMPERATURE(102L),

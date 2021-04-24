@@ -1,6 +1,7 @@
 package ua.lviv.iot.greenhouse.models;
 
 import lombok.*;
+import ua.lviv.iot.greenhouse.models.type.SensorType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

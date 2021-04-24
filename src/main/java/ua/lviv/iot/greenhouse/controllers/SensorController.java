@@ -3,7 +3,7 @@ package ua.lviv.iot.greenhouse.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.greenhouse.models.Sensor;
-import ua.lviv.iot.greenhouse.models.SensorType;
+import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
 
 import java.util.List;

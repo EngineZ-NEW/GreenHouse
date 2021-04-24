@@ -3,7 +3,7 @@ package ua.lviv.iot.greenhouse.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.lviv.iot.greenhouse.models.Sensor;
-import ua.lviv.iot.greenhouse.models.SensorType;
+import ua.lviv.iot.greenhouse.models.type.SensorType;
 
 import java.time.LocalDateTime;
 import java.util.List;
