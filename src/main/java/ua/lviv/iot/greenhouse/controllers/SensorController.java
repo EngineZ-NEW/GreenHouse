@@ -58,17 +58,20 @@ public class SensorController {
 
     @PostMapping("/temperature-data")
     public Sensor addTemperatureData(final @RequestBody Sensor sensor) {
-        return sensorService.createSensorData(sensor, SensorType.TEMPERATURE);
+        sensor.getData().setSensorType(SensorType.TEMPERATURE);
+        return sensorService.createSensorData(sensor);
     }
 
     @PostMapping("/humidity-data")
     public Sensor addHumidityData(final @RequestBody Sensor sensor) {
-        return sensorService.createSensorData(sensor, SensorType.HUMIDITY);
+        sensor.getData().setSensorType(SensorType.HUMIDITY);
+        return sensorService.createSensorData(sensor);
     }
 
     @PostMapping("/luminosity-data")
     public Sensor addLuminosityData(final @RequestBody Sensor sensor) {
-        return sensorService.createSensorData(sensor, SensorType.LUMINOSITY);
+        sensor.getData().setSensorType(SensorType.LUMINOSITY);
+        return sensorService.createSensorData(sensor);
     }
 
     @DeleteMapping
