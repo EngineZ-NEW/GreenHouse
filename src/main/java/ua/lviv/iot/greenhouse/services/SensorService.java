@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SensorService {
 
-    Sensor createSensorData(Sensor sensor, SensorType sensorType);
+    Sensor createSensorData(Sensor sensor);
 
     List<Sensor> getAllSensorData();
 
