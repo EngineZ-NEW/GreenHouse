@@ -6,6 +6,7 @@ import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -59,18 +60,21 @@ public class SensorController {
     @PostMapping("/temperature-data")
     public Sensor addTemperatureData(final @RequestBody Sensor sensor) {
         sensor.getData().setSensorType(SensorType.TEMPERATURE);
+        sensor.getData().setLocalDateTime(LocalDateTime.now());
         return sensorService.createSensorData(sensor);
     }
 
     @PostMapping("/humidity-data")
     public Sensor addHumidityData(final @RequestBody Sensor sensor) {
         sensor.getData().setSensorType(SensorType.HUMIDITY);
+        sensor.getData().setLocalDateTime(LocalDateTime.now());
         return sensorService.createSensorData(sensor);
     }
 
     @PostMapping("/luminosity-data")
     public Sensor addLuminosityData(final @RequestBody Sensor sensor) {
         sensor.getData().setSensorType(SensorType.LUMINOSITY);
+        sensor.getData().setLocalDateTime(LocalDateTime.now());
         return sensorService.createSensorData(sensor);
     }
 
