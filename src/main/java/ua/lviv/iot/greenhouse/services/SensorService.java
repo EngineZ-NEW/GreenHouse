@@ -9,21 +9,13 @@ public interface SensorService {
 
     Sensor createSensorData(Sensor sensor);
 
-    List<Sensor> getAllSensorData();
+    List<Sensor> getAllSensorData(String date);
 
-    List<Sensor> getAllSensorDataForDate(String date);
-
-    List<Sensor> getSensorDataBySensorType(SensorType sensorType);
-
-    List<Sensor> getSensorDataForDate(String date, SensorType sensorType);
+    List<Sensor> getSensorDataBySensorType(SensorType sensorType, String date);
 
     Sensor updateDataById(Long id, double currentData);
 
-    void deleteAllSensorData();
+    void deleteAllSensorData(String date);
 
-    void deleteAllSensorDataForDate(String date);
-
-    void deleteSensorDataBySensorType(SensorType sensorType);
-
-    void deleteSensorDataForDate(String date, SensorType sensorType);
+    void deleteSensorDataBySensorType(SensorType sensorType, String date);
 }

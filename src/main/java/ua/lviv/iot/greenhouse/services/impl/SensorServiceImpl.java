@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional // At class level is applied to all methods of the class
+@Transactional
 public class SensorServiceImpl implements SensorService {
 
     private final SensorDAO sensorDAO;
@@ -32,42 +32,36 @@ public class SensorServiceImpl implements SensorService {
             throw new IllegalStateException("There already is Data for this time!");
         }
 
-        sensorDAO.save(sensor);
-        return sensor;
+        return sensorDAO.save(sensor);
     }
 
     @Override
-    public List<Sensor> getAllSensorData() {
-        return sensorDAO.findAll();
+    public List<Sensor> getAllSensorData(String date) {
+        if (date == null) {
+            return sensorDAO.findAll();
+        } else {
+            LocalDate localDate = LocalDate.parse(date);
+
+            return sensorDAO.findSensorByData_LocalDateTimeBetween(
+                    localDate.atTime(LocalTime.MIN),
+                    localDate.atTime(LocalTime.MAX)
+            );
+        }
     }
 
     @Override
-    public List<Sensor> getAllSensorDataForDate(String date) {
+    public List<Sensor> getSensorDataBySensorType(SensorType sensorType, String date) {
+        if (date == null) {
+            return sensorDAO.findSensorByData_SensorType(sensorType);
+        } else {
+            LocalDate localDate = LocalDate.parse(date);
 
-        LocalDate localDate = LocalDate.parse(date);
-
-        return sensorDAO.findSensorByData_LocalDateTimeBetween(
-                localDate.atTime(LocalTime.MIN),
-                localDate.atTime(LocalTime.MAX)
-        );
-    }
-
-    @Override
-    public List<Sensor> getSensorDataBySensorType(SensorType sensorType) {
-
-        return sensorDAO.findSensorByData_SensorType(sensorType);
-    }
-
-    @Override
-    public List<Sensor> getSensorDataForDate(String date, SensorType sensorType) {
-
-        LocalDate localDate = LocalDate.parse(date);
-
-        return sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTimeBetween(
-                sensorType,
-                localDate.atTime(LocalTime.MIN),
-                localDate.atTime(LocalTime.MAX)
-        );
+            return sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTimeBetween(
+                    sensorType,
+                    localDate.atTime(LocalTime.MIN),
+                    localDate.atTime(LocalTime.MAX)
+            );
+        }
     }
 
     @Override
@@ -85,36 +79,32 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public void deleteAllSensorData() {
-        sensorDAO.deleteAll();
+    public void deleteAllSensorData(String date) {
+        if (date == null) {
+            sensorDAO.deleteAll();
+        } else {
+            LocalDate localDate = LocalDate.parse(date);
+
+            sensorDAO.deleteSensorByData_LocalDateTimeBetween(
+                    localDate.atTime(LocalTime.MIN),
+                    localDate.atTime(LocalTime.MAX)
+            );
+        }
     }
 
     @Override
-    public void deleteAllSensorDataForDate(String date) {
+    public void deleteSensorDataBySensorType(SensorType sensorType, String date) {
+        if (date == null) {
+            sensorDAO.deleteSensorByData_SensorType(sensorType);
+        } else {
+            LocalDate localDate = LocalDate.parse(date);
 
-        LocalDate localDate = LocalDate.parse(date);
+            sensorDAO.deleteSensorByData_SensorTypeAndData_LocalDateTimeBetween(
+                    sensorType,
+                    localDate.atTime(LocalTime.MIN),
+                    localDate.atTime(LocalTime.MAX)
+            );
+        }
 
-        sensorDAO.deleteSensorByData_LocalDateTimeBetween(
-                localDate.atTime(LocalTime.MIN),
-                localDate.atTime(LocalTime.MAX)
-        );
-    }
-
-    @Override
-    public void deleteSensorDataBySensorType(SensorType sensorType) {
-
-        sensorDAO.deleteSensorByData_SensorType(sensorType);
-    }
-
-    @Override
-    public void deleteSensorDataForDate(String date, SensorType sensorType) {
-
-        LocalDate localDate = LocalDate.parse(date);
-
-        sensorDAO.deleteSensorByData_SensorTypeAndData_LocalDateTimeBetween(
-                sensorType,
-                localDate.atTime(LocalTime.MIN),
-                localDate.atTime(LocalTime.MAX)
-        );
     }
 }

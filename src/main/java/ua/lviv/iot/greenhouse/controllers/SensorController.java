@@ -17,44 +17,23 @@ public class SensorController {
     private final SensorService sensorService;
 
     @GetMapping
-    public List<Sensor> getAllSensorData() {
-        return sensorService.getAllSensorData();
+    public List<Sensor> getAllSensorData(@RequestParam(required = false) String date) {
+        return sensorService.getAllSensorData(date);
     }
 
     @GetMapping("/temperature-data")
-    public List<Sensor> getTemperature() {
-        return sensorService.getSensorDataBySensorType(SensorType.TEMPERATURE);
+    public List<Sensor> getTemperature(@RequestParam(required = false) String date) {
+        return sensorService.getSensorDataBySensorType(SensorType.TEMPERATURE, date);
     }
 
     @GetMapping("/humidity-data")
-    public List<Sensor> getHumidity() {
-        return sensorService.getSensorDataBySensorType(SensorType.HUMIDITY);
+    public List<Sensor> getHumidity(@RequestParam(required = false) String date) {
+        return sensorService.getSensorDataBySensorType(SensorType.HUMIDITY, date);
     }
 
     @GetMapping("/luminosity-data")
-    public List<Sensor> getLuminosity() {
-        return sensorService.getSensorDataBySensorType(SensorType.LUMINOSITY);
-    }
-
-    // date should be in format yyyy-mm-dd
-    @GetMapping("/{date}")
-    public List<Sensor> getAllSensorDataForDay(final @PathVariable("date") String date) {
-        return sensorService.getAllSensorDataForDate(date);
-    }
-
-    @GetMapping("/temperature-data/{date}")
-    public List<Sensor> getTemperatureForDay(final @PathVariable("date") String date) {
-        return sensorService.getSensorDataForDate(date, SensorType.TEMPERATURE);
-    }
-
-    @GetMapping("/humidity-data/{date}")
-    public List<Sensor> getHumidityDay(final @PathVariable("date") String date) {
-        return sensorService.getSensorDataForDate(date, SensorType.HUMIDITY);
-    }
-
-    @GetMapping("/luminosity-data/{date}")
-    public List<Sensor> getLuminosityForDay(final @PathVariable("date") String date) {
-        return sensorService.getSensorDataForDate(date, SensorType.LUMINOSITY);
+    public List<Sensor> getLuminosity(@RequestParam(required = false) String date) {
+        return sensorService.getSensorDataBySensorType(SensorType.LUMINOSITY, date);
     }
 
     @PostMapping("/temperature-data")
@@ -79,43 +58,23 @@ public class SensorController {
     }
 
     @DeleteMapping
-    public void deleteAllSensorData() {
-        sensorService.deleteAllSensorData();
+    public void deleteAllSensorData(@RequestParam(required = false) String date) {
+        sensorService.deleteAllSensorData(date);
     }
 
     @DeleteMapping("/temperature-data")
-    public void deleteTemperature() {
-        sensorService.deleteSensorDataBySensorType(SensorType.TEMPERATURE);
+    public void deleteTemperature(@RequestParam(required = false) String date) {
+        sensorService.deleteSensorDataBySensorType(SensorType.TEMPERATURE, date);
     }
 
     @DeleteMapping("/humidity-data")
-    public void deleteHumidity() {
-        sensorService.deleteSensorDataBySensorType(SensorType.HUMIDITY);
+    public void deleteHumidity(@RequestParam(required = false) String date) {
+        sensorService.deleteSensorDataBySensorType(SensorType.HUMIDITY, date);
     }
 
     @DeleteMapping("/luminosity-data")
-    public void deleteLuminosity() {
-        sensorService.deleteSensorDataBySensorType(SensorType.LUMINOSITY);
-    }
-
-    @DeleteMapping("/{date}")
-    public void deleteSensorDataForDay(final @PathVariable("date") String date) {
-        sensorService.deleteAllSensorDataForDate(date);
-    }
-
-    @DeleteMapping("/temperature-data/{date}")
-    public void deleteTemperatureForDay(final @PathVariable("date") String date) {
-        sensorService.deleteSensorDataForDate(date, SensorType.TEMPERATURE);
-    }
-
-    @DeleteMapping("/humidity-data/{date}")
-    public void deleteHumidityForDay(final @PathVariable("date") String date) {
-        sensorService.deleteSensorDataForDate(date, SensorType.HUMIDITY);
-    }
-
-    @DeleteMapping("/luminosity-data/{date}")
-    public void deleteLuminosityForDay(final @PathVariable("date") String date) {
-        sensorService.deleteSensorDataForDate(date, SensorType.LUMINOSITY);
+    public void deleteLuminosity(@RequestParam(required = false) String date) {
+        sensorService.deleteSensorDataBySensorType(SensorType.LUMINOSITY, date);
     }
 
     @PutMapping("{id}")
