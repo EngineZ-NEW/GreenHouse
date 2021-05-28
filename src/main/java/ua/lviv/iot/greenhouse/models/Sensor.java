@@ -6,8 +6,8 @@ import ua.lviv.iot.greenhouse.models.type.SensorType;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "sensor_data")
+@Entity(name = "sensor_data")
+@Table
 @NoArgsConstructor
 @Getter
 @Setter

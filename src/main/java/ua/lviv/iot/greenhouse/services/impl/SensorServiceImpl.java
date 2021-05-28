@@ -74,8 +74,7 @@ public class SensorServiceImpl implements SensorService {
         Sensor sensor = sensorDAO.findSensorById(id);
         sensor.getData().setCurrentData(currentData);
 
-        sensorDAO.save(sensor);
-        return sensor;
+        return sensorDAO.save(sensor);
     }
 
     @Override
