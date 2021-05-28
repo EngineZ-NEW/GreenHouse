@@ -3,6 +3,7 @@ package ua.lviv.iot.greenhouse.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.greenhouse.dao.SensorDAO;
+import ua.lviv.iot.greenhouse.dto.SensorDTO;
 import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
@@ -21,18 +22,22 @@ public class SensorServiceImpl implements SensorService {
     private final SensorDAO sensorDAO;
 
     @Override
-    public Sensor createSensorData(Sensor sensor) {
+    public Sensor createSensorData(SensorDTO sensorDTO) {
 
         Optional<Sensor> sensorOptional = sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTime(
-                sensor.getData().getSensorType(),
-                sensor.getData().getLocalDateTime()
+                sensorDTO.getSensorType(),
+                sensorDTO.getLocalDateTime()
         );
 
         if (sensorOptional.isPresent()) {
             throw new IllegalStateException("There already is Data for this time!");
         }
 
-        return sensorDAO.save(sensor);
+        return sensorDAO.save(new Sensor(new Sensor.Data(
+                sensorDTO.getSensorType(),
+                sensorDTO.getLocalDateTime(),
+                sensorDTO.getCurrentData()
+        )));
     }
 
     @Override
