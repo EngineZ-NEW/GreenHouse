@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.greenhouse.dao.SensorDAO;
 import ua.lviv.iot.greenhouse.dto.SensorDTO;
+import ua.lviv.iot.greenhouse.exception.NoDataFoundException;
 import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
@@ -12,7 +13,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,37 +33,62 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public List<Sensor> getAllSensorData(String date) {
         if (date == null) {
-            return sensorDAO.findAll();
+            List<Sensor> sensorData = sensorDAO.findAll();
+
+            if (sensorData.isEmpty()) {
+                throw new NoDataFoundException("There is no sensor data yet");
+            } else {
+                return sensorData;
+            }
+
         } else {
             LocalDate localDate = LocalDate.parse(date);
 
-            return sensorDAO.findSensorByData_LocalDateTimeBetween(
+            List<Sensor> sensorData = sensorDAO.findSensorByData_LocalDateTimeBetween(
                     localDate.atTime(LocalTime.MIN),
                     localDate.atTime(LocalTime.MAX)
             );
+
+            if (sensorData.isEmpty()) {
+                throw new NoDataFoundException("There is no sensor data for this time");
+            } else {
+                return sensorData;
+            }
         }
     }
 
     @Override
     public List<Sensor> getSensorDataBySensorType(SensorType sensorType, String date) {
         if (date == null) {
-            return sensorDAO.findSensorByData_SensorType(sensorType);
+            List<Sensor> sensorData = sensorDAO.findSensorByData_SensorType(sensorType);
+
+            if (sensorData.isEmpty()) {
+                throw new NoDataFoundException("There is no " + sensorType + " sensor data yet");
+            } else {
+                return sensorData;
+            }
+
         } else {
             LocalDate localDate = LocalDate.parse(date);
 
-            return sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTimeBetween(
+            List<Sensor> sensorData = sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTimeBetween(
                     sensorType,
                     localDate.atTime(LocalTime.MIN),
                     localDate.atTime(LocalTime.MAX)
             );
+
+            if (sensorData.isEmpty()) {
+                throw new NoDataFoundException("There is no " + sensorType + " sensor data for this time");
+            } else {
+                return sensorData;
+            }
         }
     }
 
     @Override
     public Sensor updateDataById(Long id, double currentData) {
-
         if (!sensorDAO.existsById(id)) {
-            throw new IllegalStateException("There is no data with id " + id);
+            throw new NoDataFoundException("There is no data for the sensor with ID " + id);
         }
 
         Sensor sensor = sensorDAO.findSensorById(id);
