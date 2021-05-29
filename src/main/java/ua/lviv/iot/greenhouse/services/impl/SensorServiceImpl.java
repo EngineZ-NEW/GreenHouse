@@ -23,16 +23,6 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public Sensor createSensorData(SensorDTO sensorDTO) {
-
-        Optional<Sensor> sensorOptional = sensorDAO.findSensorByData_SensorTypeAndData_LocalDateTime(
-                sensorDTO.getSensorType(),
-                sensorDTO.getLocalDateTime()
-        );
-
-        if (sensorOptional.isPresent()) {
-            throw new IllegalStateException("There already is Data for this time!");
-        }
-
         return sensorDAO.save(new Sensor(new Sensor.Data(
                 sensorDTO.getSensorType(),
                 sensorDTO.getLocalDateTime(),
