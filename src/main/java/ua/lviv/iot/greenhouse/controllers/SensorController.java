@@ -2,6 +2,7 @@ package ua.lviv.iot.greenhouse.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ua.lviv.iot.greenhouse.dto.SensorDTO;
 import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.type.SensorType;
 import ua.lviv.iot.greenhouse.services.SensorService;
@@ -37,24 +38,24 @@ public class SensorController {
     }
 
     @PostMapping("/temperature-data")
-    public Sensor addTemperatureData(final @RequestBody Sensor sensor) {
-        sensor.getData().setSensorType(SensorType.TEMPERATURE);
-        sensor.getData().setLocalDateTime(LocalDateTime.now());
-        return sensorService.createSensorData(sensor);
+    public Sensor addTemperatureData(final @RequestBody SensorDTO sensorDTO) {
+        sensorDTO.setSensorType(SensorType.TEMPERATURE);
+        sensorDTO.setLocalDateTime(LocalDateTime.now());
+        return sensorService.createSensorData(sensorDTO);
     }
 
     @PostMapping("/humidity-data")
-    public Sensor addHumidityData(final @RequestBody Sensor sensor) {
-        sensor.getData().setSensorType(SensorType.HUMIDITY);
-        sensor.getData().setLocalDateTime(LocalDateTime.now());
-        return sensorService.createSensorData(sensor);
+    public Sensor addHumidityData(final @RequestBody SensorDTO sensorDTO) {
+        sensorDTO.setSensorType(SensorType.HUMIDITY);
+        sensorDTO.setLocalDateTime(LocalDateTime.now());
+        return sensorService.createSensorData(sensorDTO);
     }
 
     @PostMapping("/luminosity-data")
-    public Sensor addLuminosityData(final @RequestBody Sensor sensor) {
-        sensor.getData().setSensorType(SensorType.LUMINOSITY);
-        sensor.getData().setLocalDateTime(LocalDateTime.now());
-        return sensorService.createSensorData(sensor);
+    public Sensor addLuminosityData(final @RequestBody SensorDTO sensorDTO) {
+        sensorDTO.setSensorType(SensorType.LUMINOSITY);
+        sensorDTO.setLocalDateTime(LocalDateTime.now());
+        return sensorService.createSensorData(sensorDTO);
     }
 
     @DeleteMapping
@@ -78,8 +79,8 @@ public class SensorController {
     }
 
     @PutMapping("{id}")
-    public Sensor updateCurrentDataById(final @RequestBody Sensor sensor,
+    public Sensor updateCurrentDataById(final @RequestBody SensorDTO sensorDTO,
                                         final @PathVariable("id") Long id) {
-        return sensorService.updateDataById(id, sensor.getData().getCurrentData());
+        return sensorService.updateDataById(id, sensorDTO.getCurrentData());
     }
 }

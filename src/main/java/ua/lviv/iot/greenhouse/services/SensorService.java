@@ -1,5 +1,6 @@
 package ua.lviv.iot.greenhouse.services;
 
+import ua.lviv.iot.greenhouse.dto.SensorDTO;
 import ua.lviv.iot.greenhouse.models.Sensor;
 import ua.lviv.iot.greenhouse.models.type.SensorType;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface SensorService {
 
-    Sensor createSensorData(Sensor sensor);
+    Sensor createSensorData(SensorDTO sensorDTO);
 
     List<Sensor> getAllSensorData(String date);
 
